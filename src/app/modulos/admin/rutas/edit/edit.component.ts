@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RutaModel } from 'src/app/modelos/ruta.model';
 import { RutaService } from 'src/app/servicios/ruta.service';
 import Swal from 'sweetalert2'
+import { AeropuertoModel } from 'src/app/modelos/aeropuerto.model';
+import { AeropuertoService } from 'src/app/servicios/aeropuerto.service';
 
 @Component({
   selector: 'app-edit',
@@ -13,9 +15,12 @@ import Swal from 'sweetalert2'
 export class EditComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
+    private aeropuertoService: AeropuertoService,
     private rutaService: RutaService,
     private router: Router,
     private route: ActivatedRoute) { }
+
+    listadoAeropuertos: AeropuertoModel[] = []
 
     fgValidacion = this.fb.group({
       id: ['', [Validators.required]],
@@ -23,19 +28,28 @@ export class EditComponent implements OnInit {
       destino: ['', [Validators.required]],
       tiempo_estimado: [0, [Validators.required]],
     });
+
+    getAllAeropuertos(){
+      this.aeropuertoService.getAll().subscribe((data: AeropuertoModel[]) => {
+        this.listadoAeropuertos = data
+        console.log(data)
+      })
+    }
+  
  
     id: string=''
 
-    buscarRegistro(id: string){
+    getWithId(id: string){
       this.rutaService.getWithId(id).subscribe((data: RutaModel) => {
         console.log(data)
         this.fgValidacion.controls["id"].setValue(id)
-        this.fgValidacion.controls["origen"].setValue("origen")
-        this.fgValidacion.controls["destino"].setValue("destino")
+        this.fgValidacion.controls["origen"].setValue(data.origen as string)
+        this.fgValidacion.controls["destino"].setValue(data.destino as string)
         //REVISAR LA ASIGNACION DE CERO
-        this.fgValidacion.controls["tiempo_estimado"].setValue(0)
+        this.fgValidacion.controls["tiempo_estimado"].setValue(data.tiempo_estimado as number)
+        //this.fgValidacion.controls["tiempo_estimado"].setValue(0)
       })
-    }  
+    }
 
     edit(){
       let ruta = new RutaModel();
@@ -54,9 +68,11 @@ export class EditComponent implements OnInit {
       })
     }
   
-  ngOnInit(): void {
-    this.id = this.route.snapshot.params["id"]
-    this.buscarRegistro(this.id);
+    ngOnInit(): void {
+      this.getAllAeropuertos()
+      // Obtiene el ID de la URL
+      this.id = this.route.snapshot.params["id"]
+      //Consulta la informacion de la ruta
+      this.getWithId(this.id);
+    }
   }
-
-}

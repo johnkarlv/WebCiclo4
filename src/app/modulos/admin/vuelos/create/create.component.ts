@@ -31,10 +31,10 @@ export class CreateComponent implements OnInit {
 
   store(){
     let vuelo = new VueloModel();
-    vuelo.fecha_inicio = this.fgValidacion.controls["fecha_inicio"].value as string;
-    vuelo.hora_inicio = this.fgValidacion.controls["hora_inicio"].value as string;
-    vuelo.fecha_fin = this.fgValidacion.controls["fecha_fin"].value as string;
-    vuelo.hora_fin = this.fgValidacion.controls["hora_fin"].value as string;
+    vuelo.fecha_inicio = new Date(this.fgValidacion.controls["fecha_inicio"].value as string).toISOString();
+    vuelo.hora_inicio = new Date(this.fgValidacion.controls["hora_inicio"].value as string).toISOString();
+    vuelo.fecha_fin = new Date(this.fgValidacion.controls["fecha_fin"].value as string).toISOString();
+    vuelo.hora_fin = new Date(this.fgValidacion.controls["hora_fin"].value as string).toISOString();
     vuelo.asientos_vendidos = this.fgValidacion.controls["asientos_vendidos"].value as number;
     vuelo.nombre_piloto = this.fgValidacion.controls["nombre_piloto"].value as string;
     vuelo.ruta = this.fgValidacion.controls["ruta"].value as string;

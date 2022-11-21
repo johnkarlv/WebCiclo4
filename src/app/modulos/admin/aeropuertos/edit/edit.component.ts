@@ -30,19 +30,19 @@ export class EditComponent implements OnInit {
  
     id: string=''
 
-    buscarRegistro(id: string){
+    getWithId(id: string){
       this.aeropuertoService.getWithId(id).subscribe((data: AeropuertoModel) => {
         console.log(data)
         this.fgValidacion.controls["id"].setValue(id)
-        this.fgValidacion.controls["nombre"].setValue("nombre")
-        this.fgValidacion.controls["ciudad"].setValue("ciudad")
-        this.fgValidacion.controls["pais"].setValue("pais")
-        this.fgValidacion.controls["coordx"].setValue("coordx")
-        this.fgValidacion.controls["coordy"].setValue("coordy")
-        this.fgValidacion.controls["siglas"].setValue("siglas")
-        this.fgValidacion.controls["tipo"].setValue("tipo")
+        this.fgValidacion.controls["nombre"].setValue(data.nombre as string)
+        this.fgValidacion.controls["ciudad"].setValue(data.ciudad as string)
+        this.fgValidacion.controls["pais"].setValue(data.pais as string)
+        this.fgValidacion.controls["coordx"].setValue(data.coordx as string)
+        this.fgValidacion.controls["coordy"].setValue(data.coordy as string)
+        this.fgValidacion.controls["siglas"].setValue(data.siglas as string)
+        this.fgValidacion.controls["tipo"].setValue(data.tipo as string)
       })
-    }  
+    }
 
     edit(){
       let aeropuerto = new AeropuertoModel();
@@ -65,9 +65,10 @@ export class EditComponent implements OnInit {
       })
     }
   
-  ngOnInit(): void {
-    this.id = this.route.snapshot.params["id"]
-    this.buscarRegistro(this.id);
+    ngOnInit(): void {
+      // Obtiene el ID de la URL
+      this.id = this.route.snapshot.params["id"]
+      //Consulta la informacion del aeropuerto
+      this.getWithId(this.id);
+    }
   }
-
-}

@@ -27,14 +27,14 @@ export class EditComponent implements OnInit {
 
   id: string = ''
 
-  buscarRegistro(id: string){
+  getWithId(id: string){
     this.usuarioService.getWithId(id).subscribe((data: UsuarioModel) => {
       console.log(data)
       this.fgValidacion.controls["id"].setValue(id)
-      this.fgValidacion.controls["nombre"].setValue("nombre")
-      this.fgValidacion.controls["apellidos"].setValue("apellidos")
-      this.fgValidacion.controls["correo"].setValue("correo")
-      this.fgValidacion.controls["telefono"].setValue("telefono")
+      this.fgValidacion.controls["nombre"].setValue(data.nombre as string)
+      this.fgValidacion.controls["apellidos"].setValue(data.apellidos as string)
+      this.fgValidacion.controls["correo"].setValue(data.correo as string)
+      this.fgValidacion.controls["telefono"].setValue(data.telefono as string)
     })
   }
 
@@ -57,8 +57,9 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Obtiene el ID de la URL
     this.id = this.route.snapshot.params["id"]
-    this.buscarRegistro(this.id);
+    //Consulta la informacion del usuario
+    this.getWithId(this.id);
   }
-
 }

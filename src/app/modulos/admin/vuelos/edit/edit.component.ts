@@ -30,17 +30,16 @@ export class EditComponent implements OnInit {
  
     id: string=''
 
-    buscarRegistro(id: string){
+    getWithId(id: string){
       this.vueloService.getWithId(id).subscribe((data: VueloModel) => {
         console.log(data)
         this.fgValidacion.controls["id"].setValue(id)
-        this.fgValidacion.controls["fecha_inicio"].setValue("fecha_inicio")
-        this.fgValidacion.controls["hora_inicio"].setValue("hora_inicio")
-        this.fgValidacion.controls["fecha_fin"].setValue("fecha_fin")
-        this.fgValidacion.controls["hora_fin"].setValue("hora_fin")
-        this.fgValidacion.controls["asientos_vendidos"].setValue(0)
-        this.fgValidacion.controls["nombre_piloto"].setValue("nombre_piloto")
-        this.fgValidacion.controls["ruta"].setValue("ruta")
+        this.fgValidacion.controls["fecha_inicio"].setValue(data.fecha_inicio as string)
+        this.fgValidacion.controls["hora_inicio"].setValue(data.hora_inicio as string)
+        this.fgValidacion.controls["fecha_fin"].setValue(data.fecha_fin as string)
+        this.fgValidacion.controls["asientos_vendidos"].setValue(data.asientos_vendidos as number)
+        this.fgValidacion.controls["nombre_piloto"].setValue(data.nombre_piloto as string)
+        this.fgValidacion.controls["ruta"].setValue(data.ruta as string)
       })
     }
 
@@ -65,9 +64,10 @@ export class EditComponent implements OnInit {
       })
     }
   
-  ngOnInit(): void {
-    this.id = this.route.snapshot.params["id"]
-    this.buscarRegistro(this.id);
+    ngOnInit(): void {
+      // Obtiene el ID de la URL
+      this.id = this.route.snapshot.params["id"]
+      //Consulta la informacion del vuelo
+      this.getWithId(this.id);
+    }
   }
-
-}
